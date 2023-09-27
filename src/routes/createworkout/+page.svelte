@@ -4,7 +4,6 @@
 	import CreateWorkoutEntry from '../../components/CreateWorkout/CreateWorkoutEntry.svelte';
 	import WorkoutEntry from '../../components/CreateWorkout/WorkoutEntry.svelte';
 	import { uuidv4 } from '../../utils/uuid';
-
 	let exercises: ExercisesType = [];
 	let completed: ExercisesType = [];
 	let workoutName: string;
@@ -25,49 +24,37 @@
 	$: numOfExercises = exercises.length + 1;
 </script>
 
-<body>
-	<main>
-		<div class="wrapper">
-			<h1>Create a workout</h1>
-			<WorkoutNameInput bind:workoutName />
-
-			<CreateWorkoutEntry bind:exerciseName bind:instructions {numOfExercises} />
-			<div class="add-btn-wrapper">
-				<button class="add-btn" on:click={addItem}>Add</button>
-				<button on:click={saveWorkout} type="button" class="save-workout-btn">Save workout</button>
-			</div>
-			<ul class="exercise-list">
-				{#each exercises as exercise, index}
-					<WorkoutEntry bind:exercises {exercise} {index} />
-				{/each}
-			</ul>
-		</div>
-	</main>
-</body>
+<div class="content-wrapper">
+	<WorkoutNameInput bind:workoutName />
+	<CreateWorkoutEntry bind:exerciseName bind:instructions {numOfExercises} />
+	<div class="add-btn-wrapper">
+		<button class="add-btn" on:click={addItem}>Add</button>
+		<button on:click={saveWorkout} type="button" class="save-workout-btn">Save workout</button>
+	</div>
+	<ul class="exercise-list">
+		{#each exercises as exercise, index (exercise.id)}
+			<WorkoutEntry bind:exercises {exercise} {index} />
+		{/each}
+	</ul>
+</div>
 
 <style>
-	main {
-		display: grid;
-		/* place-items: center; */
-		/* min-height: 100vh; */
-		/* background-color: #0496ff; */
+	.content-wrapper::-webkit-scrollbar {
+		display: none;
 	}
-	h1 {
-		font-size: 28px;
-		font-weight: 600;
-		font-family: 'Sofia', sans-serif !important;
-	}
-	.wrapper {
+	.content-wrapper {
+		background-color: rgb(242, 245, 248);
 		display: block;
-		width: 100%;
-		height: auto;
+		overflow-y: auto;
 		padding-block: 25px;
+		width: 100%;
+		padding-left: 30px;
+		height: var(--min-height);
 	}
 	.exercise-list {
-		/* width: 100%; */
 		list-style-type: none;
 		display: grid;
-		place-items: center;
+		/* place-items: center; */
 	}
 	.add-btn {
 		cursor: pointer;
@@ -86,7 +73,7 @@
 		display: block;
 		width: fit-content;
 		padding-block: 10px;
-		margin-inline: auto;
+		/* margin-inline: auto; */
 	}
 	.save-workout-btn {
 		background-color: #3e6680;

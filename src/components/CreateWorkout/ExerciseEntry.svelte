@@ -1,21 +1,21 @@
 <script lang="ts">
-	import type { Exercise } from '$lib/typings';
+	import type { ExercisesType } from '$lib/typings';
 	import Icon from '@iconify/svelte';
-	export let index: number;
-	export let exercise: Exercise;
-	export let edit: boolean;
-	export let exerciseComplete: boolean;
+	export let index: number,
+		id: string,
+		exercises: ExercisesType,
+		exerciseComplete: boolean,
+		instructions: string = '',
+		exerciseName: string = '';
 
-	$: completeButtonText = exerciseComplete ? 'Completed' : 'Done';
 	function completeExercise(): void {
-		console.log(`${exercise.exerciseName} completed`);
+		console.log(`${exerciseName} completed`);
 		exerciseComplete = !exerciseComplete;
-		// let removeFromTodos = exercises.filter((elem) => elem.id !== exercise.id);
-		// exercises = removeFromTodos;
-		// completed = [...completed, exercise];
 	}
-	function toggleEdit() {
-		edit = !edit;
+
+	function remove(id: string): void {
+		let updatedList = exercises.filter((exercise) => exercise.id !== id);
+		exercises = updatedList;
 	}
 </script>
 
@@ -23,30 +23,35 @@
 	<div class="exercise-number-box">
 		<p class="exercise-number">{index + 1}</p>
 	</div>
-	<p class="exercise-name">{exercise.exerciseName}</p>
-	<button class="edit-btn" on:click={toggleEdit}>
-		<Icon height="25px" icon="tabler:edit" />
-	</button>
-</div>
-<p class="instructions">{exercise.instructions}</p>
 
-<!-- <div class="btn-container">
-	<button class="complete-btn" class:exerciseComplete on:click={completeExercise}
-		>{completeButtonText}</button
-	>
-</div> -->
+	<div class="exercise-name-padding">
+		<input class="exercise-name" bind:value={exerciseName} />
+	</div>
+	<div class="remove-icon-container">
+		<div class="remove-icon">
+			<button type="button" on:click={() => remove(id)} data-icon="tabler:trash" class="iconify">
+				<Icon height="20px" icon="tabler:trash" />
+			</button>
+		</div>
+	</div>
+</div>
+
+<textarea class="instructions" bind:value={instructions} />
 
 <style>
 	.workout-card-top {
-		display: flex;
+		display: grid;
+		grid-template-columns: auto auto 1fr;
 		justify-content: space-between;
 		align-items: center;
+		place-items: center;
 
 		padding-bottom: 20px;
 	}
 	.exercise-number-box {
 		background-color: #0496ff;
 		display: grid;
+
 		place-items: center;
 		border-radius: 2px;
 		color: white;
@@ -61,58 +66,82 @@
 		flex: 1;
 		font-size: 18px;
 		font-weight: 600;
-		/* padding-block: 5px; */
-		height: 25px;
+		height: 28px;
 		align-items: center;
-		padding-left: 15px;
+		padding-left: 10px;
 		font-family: 'Sofia', sans-serif;
 		text-align: left;
-		/* background-color: red; */
+		border: none;
+		transition-duration: 350ms;
+		animation: ease-in-out;
+		border-radius: 5px;
 	}
-	.edit-btn {
+	.exercise-name:active,
+	.exercise-name:focus,
+	.exercise-name:hover {
+		outline: none;
+		background: #f0f0f0;
+	}
+	.exercise-name-padding {
+		padding-left: 5px;
+	}
+
+	.iconify:hover :global(.iconify) {
+		color: rgb(255, 97, 97);
+	}
+
+	.remove-icon {
+		/* padding: 5px; */
+		border-radius: 5px;
+		transition-duration: 200ms;
+		animation: ease-in-out;
+	}
+	.remove-icon:hover {
+		background-color: rgb(239, 241, 247);
+	}
+	.remove-icon-container {
+		width: 100%;
+		place-content: end;
+		display: grid;
+	}
+	.iconify {
+		padding: 5px;
+		border-radius: 5px;
+		transition-duration: 200ms;
+		animation: ease-in-out;
 		background-color: transparent;
 		border: none;
+		display: grid;
+
+		place-content: end;
 	}
-	.edit-btn:hover {
-		cursor: pointer;
+
+	.iconify :global(.iconify) {
+		transition-duration: 200ms;
+		animation: ease-in-out;
+		color: #a0a0a0;
 	}
 
 	.instructions {
 		background: #ffffff;
 		border-radius: 5px;
+		border: none;
+		resize: none;
 		outline: 1px solid rgba(172, 172, 172, 0.25);
 		padding: 15px;
 		height: 150px;
 		overflow: auto;
 		scroll-behavior: smooth;
 		white-space: pre-line;
-	}
-	.btn-container {
-		display: grid;
-		place-items: center;
-		padding-top: 25px;
-	}
-	::-webkit-scrollbar {
-		display: none;
-	}
-	.complete-btn {
-		background-color: #027bce;
-		color: white;
-		width: 90%;
-		border-radius: 9999px;
-		border: none;
-		height: 30px;
 		transition-duration: 250ms;
 		animation: ease-in-out;
-		font-weight: 600;
 	}
-	.complete-btn.exerciseComplete {
-		background-color: rgb(199, 199, 199);
-		color: rgb(71, 71, 71);
-		font-weight: 600;
+	.instructions:hover {
+		outline: 1px solid rgba(156, 156, 156, 0.6);
+		cursor: text;
 	}
-	.complete-btn:hover {
-		cursor: pointer;
-		background-color: #2a8fd3;
+	.instructions:active,
+	.instructions:focus {
+		outline: 1px solid rgba(129, 129, 129, 0.9);
 	}
 </style>

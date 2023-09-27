@@ -7,13 +7,14 @@
 	<input type="text" id="input" bind:value={workoutName} />
 </div>
 
-<!-- // #027BCE // #0496FF // #3E6680 // #4BB3FD // #00487C -->
-
 <style>
 	.input-container {
-		/* background-color: rgb(202, 217, 230); */
-		padding-top: 20px;
-		padding-bottom: 35px;
+		display: flex;
+		background: #ffffff;
+		padding: 25px;
+		border-radius: 4px;
+		box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.1);
+		margin-bottom: 20px; /* SWAP OUT FOR PADDING */
 	}
 	label {
 		font-size: 20px;
@@ -28,5 +29,21 @@
 	input:focus,
 	input:active {
 		outline: none;
+	}
+
+	@media screen and (max-width: 600px) {
+		.input-container {
+			width: 90%;
+		}
+	}
+	@media screen and (min-width: 600px) {
+		.input-container {
+			width: 75%;
+		}
+	}
+	@media screen and (min-width: 1024px) {
+		.input-container {
+			width: 700px;
+		}
 	}
 </style>

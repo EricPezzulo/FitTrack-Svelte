@@ -8,4 +8,3 @@ export type WorkoutType = {
 	workoutName: string;
 	exercises: ExercisesType;
 };
-export {};

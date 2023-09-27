@@ -26,7 +26,6 @@
 		display: grid;
 		align-items: center;
 		height: auto;
-		align-items: center;
 		grid-template-columns: auto 1fr;
 		padding-bottom: 10px;
 	}
@@ -80,9 +79,10 @@
 		flex-direction: column;
 		background: #ffffff;
 		padding: 25px;
-		border-radius: 10px;
-		box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.15);
-		margin: 0 auto 0 auto;
+		border-radius: 4px;
+		outline: 1px solid rgb(112, 139, 226);
+		/* box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.15); */
+		/* margin: 0 auto 0 auto; */
 	}
 	@media screen and (max-width: 600px) {
 		.create-exercise-container {

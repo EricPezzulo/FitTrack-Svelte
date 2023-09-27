@@ -1,29 +1,30 @@
 <script lang="ts">
 	import type { Exercise, ExercisesType } from '$lib/typings';
 	import ExerciseEntry from './ExerciseEntry.svelte';
-	import ExerciseEntryEdit from './ExerciseEntryEdit.svelte';
 	export let exercises: ExercisesType;
 	export let exercise: Exercise;
 	export let index: number;
 
 	let exerciseComplete = false;
-	let edit = false;
 </script>
 
 <li class="entry-wrapper">
 	<div class="item">
-		{#if !edit}
-			<ExerciseEntry {index} bind:exercise bind:edit bind:exerciseComplete />
-		{:else}
-			<ExerciseEntryEdit {index} bind:exercise bind:edit bind:exerciseComplete bind:exercises />
-		{/if}
+		<ExerciseEntry
+			bind:instructions={exercise.instructions}
+			bind:exerciseName={exercise.exerciseName}
+			bind:exercises
+			bind:id={exercise.id}
+			{index}
+			bind:exerciseComplete
+		/>
 	</div>
 </li>
 
 <style>
 	.entry-wrapper {
 		padding-block: 8px;
-		width: 50%;
+		/* width: 100%; */
 	}
 	.item {
 		padding: 25px;
@@ -35,20 +36,19 @@
 		flex-direction: column;
 		height: auto;
 	}
-	@media screen and (max-width: 1024px) {
+	@media screen and (max-width: 600px) {
 		.entry-wrapper {
-			width: 700px;
+			width: 90%;
 		}
 	}
-
-	@media screen and (max-width: 780px) {
+	@media screen and (min-width: 600px) {
 		.entry-wrapper {
 			width: 75%;
 		}
 	}
-	@media screen and (max-width: 600px) {
+	@media screen and (min-width: 1024px) {
 		.entry-wrapper {
-			width: 90%;
+			width: 700px;
 		}
 	}
 </style>
