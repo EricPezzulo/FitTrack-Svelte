@@ -21,7 +21,7 @@
 
 <div class="workout-card-top">
 	<div class="exercise-number-box">
-		<p class="exercise-number">{index + 1}</p>
+		<p class="exercise-number">{exercises.length - index}</p>
 	</div>
 
 	<div class="exercise-name-padding">

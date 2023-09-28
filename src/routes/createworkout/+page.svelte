@@ -1,18 +1,23 @@
 <script lang="ts">
 	import type { ExercisesType, WorkoutType } from '$lib/typings';
+	import { slide } from 'svelte/transition';
 	import WorkoutNameInput from '../../components/CreateWorkout/ WorkoutNameInput.svelte';
 	import CreateWorkoutEntry from '../../components/CreateWorkout/CreateWorkoutEntry.svelte';
 	import WorkoutEntry from '../../components/CreateWorkout/WorkoutEntry.svelte';
 	import { uuidv4 } from '../../utils/uuid';
+	import UpcomingWorkouts from '../../components/CreateWorkout/UpcomingWorkouts.svelte';
+	import TopBanner from '../../components/CreateWorkout/TopBanner.svelte';
 	let exercises: ExercisesType = [];
-	let completed: ExercisesType = [];
 	let workoutName: string;
 	let exerciseName: string;
 	let instructions: string;
 	let newWorkout: WorkoutType;
+
+	import { data } from '../../data';
+	// console.log(data);
 	function addItem(): void {
 		let id = uuidv4();
-		exercises = [...exercises, { exerciseName, instructions, id }];
+		exercises = [{ exerciseName, instructions, id }, ...exercises];
 		console.log(exerciseName, instructions);
 		exerciseName = '';
 		instructions = '';
@@ -25,6 +30,8 @@
 </script>
 
 <div class="content-wrapper">
+	<TopBanner />
+	<UpcomingWorkouts {exercises} {data} />
 	<WorkoutNameInput bind:workoutName />
 	<CreateWorkoutEntry bind:exerciseName bind:instructions {numOfExercises} />
 	<div class="add-btn-wrapper">
@@ -43,8 +50,9 @@
 		display: none;
 	}
 	.content-wrapper {
+		display: flex;
+		flex-direction: column;
 		background-color: rgb(242, 245, 248);
-		display: block;
 		overflow-y: auto;
 		padding-block: 25px;
 		width: 100%;
@@ -54,7 +62,6 @@
 	.exercise-list {
 		list-style-type: none;
 		display: grid;
-		/* place-items: center; */
 	}
 	.add-btn {
 		cursor: pointer;
@@ -73,7 +80,6 @@
 		display: block;
 		width: fit-content;
 		padding-block: 10px;
-		/* margin-inline: auto; */
 	}
 	.save-workout-btn {
 		background-color: #3e6680;

@@ -1,14 +1,33 @@
 <script lang="ts">
 	import type { Exercise, ExercisesType } from '$lib/typings';
+	import { crossfade } from 'svelte/transition';
+	import { quintOut } from 'svelte/easing';
 	import ExerciseEntry from './ExerciseEntry.svelte';
-	export let exercises: ExercisesType;
-	export let exercise: Exercise;
-	export let index: number;
+	export let exercises: ExercisesType, exercise: Exercise, index: number;
 
 	let exerciseComplete = false;
+
+	const [send, receive] = crossfade({
+		duration: (d) => Math.sqrt(d * 200),
+
+		fallback(node, params) {
+			const style = getComputedStyle(node);
+			const transform = style.transform === 'none' ? '' : style.transform;
+
+			return {
+				duration: 600,
+				easing: quintOut,
+				css: (t) => `
+				transform: ${transform} scale(${t});
+				opacity: ${t}
+	
+			`
+			};
+		}
+	});
 </script>
 
-<li class="entry-wrapper">
+<li in:receive={{ key: exercise.id }} out:send={{ key: exercise.id }} class="entry-wrapper">
 	<div class="item">
 		<ExerciseEntry
 			bind:instructions={exercise.instructions}
@@ -24,7 +43,6 @@
 <style>
 	.entry-wrapper {
 		padding-block: 8px;
-		/* width: 100%; */
 	}
 	.item {
 		padding: 25px;

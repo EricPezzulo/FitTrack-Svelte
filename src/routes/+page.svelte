@@ -18,6 +18,7 @@
 		display: grid;
 		place-items: center;
 		width: 100%;
+		height: 100%;
 	}
 	.page-wrapper {
 		display: grid;
