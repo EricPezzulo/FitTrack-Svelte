@@ -1,11 +1,8 @@
-export type ExercisesType = Exercise[];
-export type Exercise = {
+export type ExerciseType = {
 	exerciseName: string;
 	instructions: string;
 	id: string;
 };
-export type WorkoutType = {
-	workoutName: string;
-	exercises: ExercisesType;
+export type ExerciseListType = {
+	exercises: ExerciseType[];
 };
-export type DataProps = Exercise[];

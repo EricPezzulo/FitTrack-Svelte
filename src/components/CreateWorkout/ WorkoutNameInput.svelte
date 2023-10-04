@@ -1,49 +1,15 @@
 <script lang="ts">
-	export let workoutName: string;
+	import { workoutNameStore } from '../../stores';
 </script>
 
-<div class="input-container">
-	<label for="input">Workout name:</label>
-	<input type="text" id="input" bind:value={workoutName} />
+<div class="pt-10 p-5 md:max-w-2xl">
+	<div class="bg-white border-gray-200 border shadow-sm p-5 w-full rounded">
+		<label class="text-lg" for="workout-name-input">Workout Name</label>
+		<input
+			class="items-center h-8 flex bg-slate-100 rounded px-2 w-full focus:outline-0"
+			type="text"
+			id="workout-name-input"
+			bind:value={$workoutNameStore}
+		/>
+	</div>
 </div>
-
-<style>
-	.input-container {
-		display: flex;
-		background: #ffffff;
-		padding: 25px;
-		border-radius: 4px;
-		box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.1);
-		margin-bottom: 20px; /* SWAP OUT FOR PADDING */
-	}
-	label {
-		font-size: 20px;
-	}
-	input {
-		border-radius: 5px;
-		border: none;
-		background-color: rgb(245, 245, 245);
-		height: 25px;
-		padding-inline: 5px;
-	}
-	input:focus,
-	input:active {
-		outline: none;
-	}
-
-	@media screen and (max-width: 600px) {
-		.input-container {
-			width: 90%;
-		}
-	}
-	@media screen and (min-width: 600px) {
-		.input-container {
-			width: 75%;
-		}
-	}
-	@media screen and (min-width: 1024px) {
-		.input-container {
-			width: 700px;
-		}
-	}
-</style>
