@@ -25,9 +25,20 @@
 		instructions = '';
 	};
 
-	const saveWorkout = (): void => {
-		// newWorkout = { workoutName, exercises_list };
+	const saveWorkout = async () => {
+		const newWorkout = { $workoutNameStore, $exerciseList };
 		console.log($workoutNameStore, $exerciseList);
+		try {
+			await fetch('http://localhost:8000/', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ data: newWorkout })
+			});
+		} catch (error) {
+			console.log((error as Error).message);
+		}
 	};
 
 	$: console.log($exerciseList);
