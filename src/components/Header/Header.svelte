@@ -10,8 +10,6 @@
 	const toggleUserMenu = () => {
 		userMenuActive = !userMenuActive;
 	};
-
-	$: console.log(userMenuActive);
 </script>
 
 <header class="bg-white flex flex-row h-14 border-b border-gray-200">

@@ -1,5 +1,7 @@
 <script lang="ts">
 	import Button from '../../components/Elements/Button.svelte';
+
+	let str: string;
 	export let data;
 
 	console.log(data);
@@ -16,4 +18,7 @@
 			<Button bgColor="bg-white">Browse Workouts</Button>
 		</div>
 	</div>
+	{#if str !== undefined}
+		{str}
+	{/if}
 </div>
