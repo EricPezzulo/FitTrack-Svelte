@@ -1,10 +1,7 @@
 <script lang="ts">
 	import Button from '../../components/Elements/Button.svelte';
-
-	let str: string;
+	import ListOfWorkouts from '../../components/Workouts/ListOfWorkouts.svelte';
 	export let data;
-
-	console.log(data);
 </script>
 
 <div class="flex flex-col bg-[#f2f5f8] pt-7 h-full">
@@ -18,7 +15,5 @@
 			<Button bgColor="bg-white">Browse Workouts</Button>
 		</div>
 	</div>
-	{#if str !== undefined}
-		{str}
-	{/if}
+	<ListOfWorkouts data={data.data} />
 </div>

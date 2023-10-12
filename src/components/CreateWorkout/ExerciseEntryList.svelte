@@ -13,7 +13,7 @@
 		<div class="bg-white rounded p-5 shadow border border-gray-200">
 			<div class="flex items-center pb-3">
 				<div class="flex items-center justify-center bg-[#0496ff] w-8 h-8 text-white rounded-sm">
-					<p class="font-sofia text-xl font-semibold">{$exerciseList.exercises.length - index}</p>
+					<p class="font-sofia text-xl font-semibold">{index + 1}</p>
 				</div>
 				<div class="pl-2 flex-1 flex">
 					<input
