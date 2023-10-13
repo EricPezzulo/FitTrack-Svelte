@@ -12,12 +12,15 @@
 		instructions: string;
 	};
 
-	export let data: PropType[];
-	// console.log(data);
+	import { itemsStore } from '../../stores';
+	console.log($itemsStore);
 </script>
 
 <div class="grid sm:p-2 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
-	{#each data as workout (workout._id)}
+	{#if $itemsStore.length === 0}
+		<p>loading...</p>
+	{/if}
+	{#each $itemsStore as workout (workout._id)}
 		<WorkoutCard {workout} />
 	{/each}
 </div>

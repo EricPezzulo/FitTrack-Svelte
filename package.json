@@ -16,6 +16,7 @@
 		"@iconify/svelte": "^3.1.4",
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.20.4",
+		"@types/mongodb": "^4.0.7",
 		"@typescript-eslint/eslint-plugin": "^6.0.0",
 		"@typescript-eslint/parser": "^6.0.0",
 		"autoprefixer": "^10.4.16",
@@ -36,6 +37,7 @@
 	"type": "module",
 	"dependencies": {
 		"@auth/core": "^0.16.1",
+		"@auth/mongodb-adapter": "^2.0.1",
 		"@auth/sveltekit": "^0.3.9",
 		"mongodb": "^6.1.0"
 	}

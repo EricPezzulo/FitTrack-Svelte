@@ -1,7 +1,14 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import Button from '../../components/Elements/Button.svelte';
 	import ListOfWorkouts from '../../components/Workouts/ListOfWorkouts.svelte';
+
+	import { itemsStore } from '../../stores';
 	export let data;
+
+	onMount(() => {
+		$itemsStore = data.data;
+	});
 </script>
 
 <div class="flex flex-col bg-[#f2f5f8] pt-7 h-full">
@@ -15,5 +22,5 @@
 			<Button bgColor="bg-white">Browse Workouts</Button>
 		</div>
 	</div>
-	<ListOfWorkouts data={data.data} />
+	<ListOfWorkouts />
 </div>

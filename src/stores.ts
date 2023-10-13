@@ -1,10 +1,10 @@
-import type { ExerciseType, ExerciseListType } from '$lib/typings';
+import type { ExerciseType, ExerciseListType, Workout } from '$lib/typings';
 import { writable } from 'svelte/store';
 
 export const exerciseStore = writable<ExerciseType>({
 	exerciseName: '',
 	instructions: '',
-	id: ''
+	_id: ''
 });
 
 export const exerciseEntryCount = writable(0);
@@ -29,3 +29,5 @@ export const proteinTargetColorStore = writable<string>('text-[#E00000]');
 export const carbohydratesStore = writable<number>(0);
 export const carbohydratesTargetStore = writable<number>(500);
 export const carbohydratesTargetColorStore = writable<string>('text-[#E00000]');
+
+export const itemsStore = writable<Workout[]>([]);

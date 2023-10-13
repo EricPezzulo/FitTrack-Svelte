@@ -20,6 +20,7 @@
 			_id
 		};
 		$exerciseList = { exercises: [...$exerciseList.exercises, newExerciseEntry] };
+		console.log($exerciseList);
 		$entryNumberStore++;
 		exerciseName = '';
 		instructions = '';

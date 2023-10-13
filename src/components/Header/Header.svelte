@@ -4,6 +4,8 @@
 	import { signIn, signOut } from '@auth/sveltekit/client';
 	import { page } from '$app/stores';
 	import Icon from '@iconify/svelte';
+	import { scale } from 'svelte/transition';
+	import { quintIn, quintOut } from 'svelte/easing';
 
 	let userMenuActive = false;
 
@@ -47,6 +49,8 @@
 
 	{#if userMenuActive}
 		<div
+			in:scale={{ duration: 250, start: 0.5, easing: quintIn }}
+			out:scale={{ duration: 350, start: 0.5, easing: quintOut }}
 			use:clickOutside
 			on:click_outside={() => (userMenuActive = false)}
 			id="userMenu"

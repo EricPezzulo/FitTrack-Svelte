@@ -3,12 +3,12 @@
 	import { exerciseList } from '../../stores';
 
 	const remove = (id: string): void => {
-		let updatedList = $exerciseList.exercises.filter((elem) => elem.id !== id);
+		let updatedList = $exerciseList.exercises.filter((elem) => elem._id !== id);
 		$exerciseList.exercises = updatedList;
 	};
 </script>
 
-{#each $exerciseList.exercises as exercise, index (exercise.id)}
+{#each $exerciseList.exercises as exercise, index (exercise._id)}
 	<div class="p-5 md:max-w-2xl">
 		<div class="bg-white rounded p-5 shadow border border-gray-200">
 			<div class="flex items-center pb-3">
@@ -23,7 +23,7 @@
 					/>
 				</div>
 				<button
-					on:click={() => remove(exercise.id)}
+					on:click={() => remove(exercise._id)}
 					type="button"
 					class="group flex items-center justify-center hover:bg-slate-100 h-8 w-8 rounded duration-150 ease-in cursor-pointer"
 				>
