@@ -2,8 +2,6 @@ import { connectToDb } from '$lib/mongoConnect.js';
 import { json } from '@sveltejs/kit';
 
 export async function GET() {
-	// const my_string: string = 'this is my test string';
-
 	const db = await connectToDb();
 	const collection = db.collection('workouts');
 	const res = await collection.find({}).toArray();

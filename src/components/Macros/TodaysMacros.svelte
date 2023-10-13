@@ -44,8 +44,6 @@
 			$carbohydratesTargetColorStore = 'text-[#E00000]';
 		}
 	};
-
-	$: console.log($proteinTargetColorStore);
 </script>
 
 <div class="p-5 md:max-w-2xl">

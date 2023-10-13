@@ -8,7 +8,7 @@
 	<Menu />
 	<div class="flex flex-col flex-1">
 		<Header />
-		<div class="bg-slate-50 h-full">
+		<div class="bg-slate-100 h-full">
 			<slot />
 		</div>
 	</div>

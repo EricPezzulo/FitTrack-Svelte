@@ -12,15 +12,15 @@ const client = new MongoClient(MONGODB_URI, {
 	}
 });
 
+export const clientPromise: Promise<MongoClient> = client.connect();
+
 export async function connectToDb() {
 	if (cachedDb) {
 		return cachedDb;
 	}
-	// const client = await MongoClient.connect(MONGODB_URI);
 	const db = client.db('fittrack');
 	await client.connect();
 	cachedDb = db;
 	console.log('🤖 Connected to MongoDB');
-
 	return db;
 }

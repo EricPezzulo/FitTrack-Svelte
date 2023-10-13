@@ -6,7 +6,7 @@
 	import { quintOut } from 'svelte/easing';
 
 	export let workout: Workout;
-	console.log(workout);
+
 	let optionsMenuVisable = false;
 
 	function handleToggleOptions() {

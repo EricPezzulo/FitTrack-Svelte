@@ -2,7 +2,7 @@ import { SvelteKitAuth } from '@auth/sveltekit';
 import GitHub from '@auth/core/providers/github';
 import { AUTH_SECRET, GITHUB_ID, GITHUB_SECRET } from '$env/static/private';
 import { MongoDBAdapter } from '@auth/mongodb-adapter';
-import clientPromise from '$lib/authDbConnect';
+import { clientPromise } from '$lib/mongoConnect';
 
 export const handle = SvelteKitAuth({
 	providers: [GitHub({ clientId: GITHUB_ID, clientSecret: GITHUB_SECRET })],
@@ -12,9 +12,7 @@ export const handle = SvelteKitAuth({
 	adapter: MongoDBAdapter(clientPromise, {
 		databaseName: 'fittrack',
 		collections: {
-			Users: 'users',
-			Sessions: 'sessions',
-			Accounts: 'accounts'
+			Users: 'users'
 		}
 	})
 });

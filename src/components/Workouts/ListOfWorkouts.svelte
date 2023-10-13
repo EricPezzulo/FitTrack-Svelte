@@ -11,9 +11,7 @@
 		exerciseName: string;
 		instructions: string;
 	};
-
 	import { itemsStore } from '../../stores';
-	console.log($itemsStore);
 </script>
 
 <div class="grid sm:p-2 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
