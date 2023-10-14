@@ -31,7 +31,9 @@
 </script>
 
 <div out:fly={{ y: 200, duration: 300 }} class="p-2">
-	<div class="relative bg-white max-h-64 border broder-slate-200 rounded w-full sm:max-w-sm p-5">
+	<div
+		class="relative z-0 bg-white max-h-64 border broder-slate-200 rounded w-full sm:max-w-sm p-5"
+	>
 		<div>
 			<div class="flex items-center justify-between pb-2">
 				<p class="text-xl font-bold">{workout.workoutName}</p>
