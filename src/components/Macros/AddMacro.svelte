@@ -2,8 +2,6 @@
 	import Icon from '@iconify/svelte';
 	import Button from '../Elements/Button.svelte';
 	import { onMount } from 'svelte';
-
-	export let macroName: string;
 	import {
 		caloriesTargetColorStore,
 		caloriesTargetStore,
@@ -17,8 +15,8 @@
 		fatsTargetStore,
 		fatsTargetColorStore,
 		carbohydratesTargetStore
-	} from '../../stores';
-
+	} from '../../stores/macrosStores';
+	export let macroName: string;
 	let count: number = 0;
 
 	const increment = (): void => {
@@ -50,39 +48,39 @@
 	const updateMacros = () => {
 		switch (macroName.toLowerCase()) {
 			case 'calories':
-				$caloriesStore = $caloriesStore + count;
+				caloriesStore.increment(count);
 				if ($caloriesStore >= $caloriesTargetStore) {
-					$caloriesTargetColorStore = 'text-green-500';
+					caloriesTargetColorStore.satisfied();
 				} else {
-					$caloriesTargetColorStore = 'text-[#E00000]';
+					caloriesTargetColorStore.unsatisfied();
 				}
 				count = 0;
 				break;
 			case 'protein':
-				$proteinStore = $proteinStore + count;
+				proteinStore.increment(count);
 				if ($proteinStore >= $proteinTargetStore) {
-					$proteinTargetColorStore = 'text-green-500';
+					proteinTargetColorStore.satisfied();
 				} else {
-					$proteinTargetColorStore = 'text-[#E00000]';
+					proteinTargetColorStore.unsatisfied();
 				}
 				count = 0;
 				break;
 			case 'carbs':
-				$carbohydratesStore = $carbohydratesStore + count;
+				carbohydratesStore.increment(count);
 				if ($carbohydratesStore >= $carbohydratesTargetStore) {
-					$carbohydratesTargetColorStore = 'text-green-500';
+					carbohydratesTargetColorStore.satisfied();
 				} else {
-					$carbohydratesTargetColorStore = 'text-[#E00000]';
+					carbohydratesTargetColorStore.unsatisfied();
 				}
 				count = 0;
 
 				break;
 			case 'fats':
-				$fatsStore = $fatsStore + count;
+				fatsStore.increment(count);
 				if ($fatsStore >= $fatsTargetStore) {
-					$fatsTargetColorStore = 'text-green-500';
+					fatsTargetColorStore.satisfied();
 				} else {
-					$fatsTargetColorStore = 'text-[#E00000]';
+					fatsTargetColorStore.unsatisfied();
 				}
 				count = 0;
 				break;

@@ -13,35 +13,34 @@
 		fatsStore,
 		fatsTargetStore,
 		fatsTargetColorStore
-	} from '../../stores';
+	} from '../../stores/macrosStores';
 
 	const isFatsTargetSatisfied = (): void => {
 		if ($fatsStore >= $fatsTargetStore) {
-			$fatsTargetColorStore = 'text-green-500';
+			fatsTargetColorStore.satisfied();
 		} else {
-			$fatsTargetColorStore = 'text-[#E00000]';
+			fatsTargetColorStore.unsatisfied();
 		}
 	};
-
 	const isCalsTargetSatisfied = (): void => {
 		if ($caloriesStore >= $caloriesTargetStore) {
-			$caloriesTargetColorStore = 'text-green-500';
+			caloriesTargetColorStore.satisfied();
 		} else {
-			$caloriesTargetColorStore = 'text-[#E00000]';
+			caloriesTargetColorStore.unsatisfied();
 		}
 	};
 	const isProteinTargetSatisfied = (): void => {
 		if ($proteinStore >= $proteinTargetStore) {
-			$proteinTargetColorStore = 'text-green-500';
+			proteinTargetColorStore.satisfied();
 		} else {
-			$proteinTargetColorStore = 'text-[#E00000]';
+			proteinTargetColorStore.unsatisfied();
 		}
 	};
 	const isCarbohydratesTargetSatisfied = (): void => {
 		if ($carbohydratesStore >= $carbohydratesTargetStore) {
-			$carbohydratesTargetColorStore = 'text-green-500';
+			carbohydratesTargetColorStore.satisfied();
 		} else {
-			$carbohydratesTargetColorStore = 'text-[#E00000]';
+			carbohydratesTargetColorStore.unsatisfied();
 		}
 	};
 </script>
