@@ -1,16 +1,72 @@
-<script>
+<script lang="ts">
+	import { writable } from 'svelte/store';
 	import CalendarRow from './CalendarRow.svelte';
 
-	let date = new Date();
-	let daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-	let monthStartDay = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+	export let month = writable<number>(new Date().getMonth());
+	let year = new Date().getFullYear();
+	const months: { [key: number]: string } = {
+		0: 'January',
+		1: 'Febuary',
+		2: 'March',
+		3: 'April',
+		4: 'May',
+		5: 'June',
+		6: 'July',
+		7: 'August',
+		8: 'September',
+		9: 'October',
+		10: 'November',
+		11: 'December'
+	};
 
-	let days = Array(daysInMonth)
-		.fill(null)
-		.map((day, i) => i + 1);
+	let daysInMonth: number,
+		lastDayLastMonth: number,
+		monthEndDayOfWeek: number,
+		paddingEndNumber: number,
+		monthStartDayOfWeek: number,
+		paddingStartNumber: number,
+		startLastMonthDays: number,
+		paddingStart: number[],
+		paddingEnd: number[],
+		days: number[];
 
+	function buildCalender() {
+		daysInMonth = new Date(year, $month + 1, 0).getDate();
+		lastDayLastMonth = new Date(year, $month, 0).getDate();
+		monthEndDayOfWeek = new Date(year, $month + 1, 0).getDay();
+		paddingEndNumber = 7 - (monthEndDayOfWeek + 1);
+		monthStartDayOfWeek = new Date(year, $month, 1).getDay();
+		paddingStartNumber = monthStartDayOfWeek;
+		startLastMonthDays = lastDayLastMonth - paddingStartNumber + 1;
+		paddingStart = Array(paddingStartNumber)
+			.fill(null)
+			.map((_, i) => startLastMonthDays + i);
+		paddingEnd = Array(paddingEndNumber)
+			.fill(null)
+			.map((_, i) => i + 1);
+		days = [
+			...paddingStart,
+			...Array(daysInMonth)
+				.fill(null)
+				.map((_, i) => i + 1),
+			...paddingEnd
+		];
+	}
+	buildCalender();
+
+	function paginateNextMonth() {
+		if ($month < 11) {
+			$month = $month += 1;
+			buildCalender();
+		}
+	}
+	function paginatePrevMonth() {
+		if ($month > 0) {
+			$month = $month -= 1;
+			buildCalender();
+		}
+	}
 	const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-	console.log(days);
 </script>
 
 <table
@@ -18,7 +74,12 @@
 >
 	<thead>
 		<tr>
-			<th class="font-semibold text-xl md:text-2xl pl-3 pt-3">October</th>
+			<th class="font-semibold text-xl md:text-2xl pl-3 pt-3">
+				<button on:click={paginatePrevMonth} class="text-sm">prev</button>
+				{months[$month]}
+				{year}
+				<button on:click={paginateNextMonth} class="text-sm">next</button>
+			</th>
 		</tr>
 		<tr class="grid grid-cols-7 border-b">
 			{#each daysOfWeek as weekday}<th class="p-2 text-sm md:text-base">{weekday}</th>{/each}
@@ -29,6 +90,7 @@
 		<CalendarRow {days} fromRange={7} toRange={14} />
 		<CalendarRow {days} fromRange={14} toRange={21} />
 		<CalendarRow {days} fromRange={21} toRange={28} />
-		<CalendarRow {days} fromRange={28} toRange={31} />
+		<CalendarRow {days} fromRange={28} toRange={35} />
+		<CalendarRow {days} fromRange={35} toRange={42} />
 	</tbody>
 </table>
