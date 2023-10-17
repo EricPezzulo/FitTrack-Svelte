@@ -1,8 +1,12 @@
 <script lang="ts">
-	import { writable } from 'svelte/store';
 	import CalendarRow from './CalendarRow.svelte';
+	import type { Workout } from '$lib/typings';
+	import type { ObjectId } from 'mongodb';
+	import { writable } from 'svelte/store';
 
+	export let calendarEvents: { date: string; userId: string; _id: ObjectId; workout: Workout }[];
 	export let month = writable<number>(new Date().getMonth());
+
 	let year = new Date().getFullYear();
 	const months: { [key: number]: string } = {
 		0: 'January',
@@ -19,6 +23,8 @@
 		11: 'December'
 	};
 
+	type calendarEventsType = { date: string; userId: string; _id: ObjectId; workout: Workout }[];
+	type DayType = { day: number; workoutName: string | null };
 	let daysInMonth: number,
 		lastDayLastMonth: number,
 		monthEndDayOfWeek: number,
@@ -26,11 +32,12 @@
 		monthStartDayOfWeek: number,
 		paddingStartNumber: number,
 		startLastMonthDays: number,
-		paddingStart: number[],
-		paddingEnd: number[],
-		days: number[];
+		paddingStart: DayType[],
+		paddingEnd: DayType[],
+		allDays: DayType[],
+		days: DayType[] = [];
 
-	function buildCalender() {
+	function buildCalendar() {
 		daysInMonth = new Date(year, $month + 1, 0).getDate();
 		lastDayLastMonth = new Date(year, $month, 0).getDate();
 		monthEndDayOfWeek = new Date(year, $month + 1, 0).getDay();
@@ -38,39 +45,71 @@
 		monthStartDayOfWeek = new Date(year, $month, 1).getDay();
 		paddingStartNumber = monthStartDayOfWeek;
 		startLastMonthDays = lastDayLastMonth - paddingStartNumber + 1;
+
 		paddingStart = Array(paddingStartNumber)
 			.fill(null)
-			.map((_, i) => startLastMonthDays + i);
+			.map((_, i) => {
+				return {
+					day: startLastMonthDays + i,
+					workoutName: null
+				};
+			});
+
 		paddingEnd = Array(paddingEndNumber)
 			.fill(null)
-			.map((_, i) => i + 1);
-		days = [
+			.map((_, i) => {
+				return {
+					day: i + 1,
+					workoutName: null
+				};
+			});
+		allDays = [
 			...paddingStart,
 			...Array(daysInMonth)
 				.fill(null)
-				.map((_, i) => i + 1),
+				.map((_, i) => {
+					return {
+						day: i + 1,
+						workoutName: null
+					};
+				}),
 			...paddingEnd
 		];
+		days = allDays.map((day) => {
+			const matchingEvent = calendarEvents.find(
+				(event) => day.day === Number(event.date.split('/')[1])
+			);
+			if (matchingEvent) {
+				// console.log(matchingEvent.workout);
+				return {
+					...day,
+					workoutName: matchingEvent.workout.workoutName
+				};
+			}
+			return day;
+		});
+		return days;
 	}
-	buildCalender();
-
 	function paginateNextMonth() {
 		if ($month < 11) {
-			$month = $month += 1;
-			buildCalender();
+			++$month;
+			buildCalendar();
 		}
 	}
+
 	function paginatePrevMonth() {
 		if ($month > 0) {
-			$month = $month -= 1;
-			buildCalender();
+			--$month;
+			buildCalendar();
 		}
 	}
+	buildCalendar();
+	$: console.log(days);
 	const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 </script>
 
 <table
-	class="flex flex-col border-collapse w-full outline outline-1 outline-slate-300 bg-white rounded-lg max-w-3xl"
+	class="flex flex-col border-collapse w-full outline outline-1 outline-slate-300 bg-white rounded-lg max-w-4xl"
 >
 	<thead>
 		<tr>
