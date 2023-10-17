@@ -6,19 +6,29 @@
 	import Icon from '@iconify/svelte';
 	import { scale } from 'svelte/transition';
 	import { quintIn, quintOut } from 'svelte/easing';
-
+	export let showMobileMenu: boolean;
 	let userMenuActive = false;
 
 	const toggleUserMenu = () => {
 		userMenuActive = !userMenuActive;
 	};
+
+	const openMobileMenu = () => {
+		showMobileMenu = !showMobileMenu;
+	};
 </script>
 
-<header class="bg-white flex flex-row h-14 border-b border-gray-200">
+<header class="z-20 bg-white border-b border-slate-200 flex flex-row h-14">
 	<div class="p-2 sm:px-5 flex items-center justify-between w-full">
-		<a href="/">
-			<h1 class="text-xl font-semibold whitespace-nowrap">Fit Track</h1>
-		</a>
+		<div class="flex items-center">
+			<button on:click={openMobileMenu} class="pr-2 md:hidden">
+				<Icon icon="tabler:menu-2" height="24px" />
+			</button>
+
+			<a href="/">
+				<h1 class="text-xl font-semibold whitespace-nowrap">Fit Track</h1>
+			</a>
+		</div>
 		{#if $page.data.session}
 			<div class="flex">
 				{#if $page.data.session?.user?.image}
