@@ -101,16 +101,16 @@ export function buildCalendar(calendarEvents: calendarEventsType, month: number)
 	};
 }
 
-export function paginateNextMonth(calendarEvents: calendarEventsType) {
-	if ($month < 11) {
-		const newMonth = $month + 1;
-		buildCalendar(calendarEvents, newMonth);
-	}
-}
+// export function paginateNextMonth(calendarEvents: calendarEventsType) {
+// 	if ($month < 11) {
+// 		const newMonth = $month + 1;
+// 		buildCalendar(calendarEvents, newMonth);
+// 	}
+// }
 
-export function paginatePrevMonth(calendarEvents: calendarEventsType) {
-	if ($month > 0) {
-		const newMonth = $month - 1;
-		buildCalendar(calendarEvents, newMonth);
-	}
-}
+// export function paginatePrevMonth(calendarEvents: calendarEventsType) {
+// 	if ($month > 0) {
+// 		const newMonth = $month - 1;
+// 		buildCalendar(calendarEvents, newMonth);
+// 	}
+// }

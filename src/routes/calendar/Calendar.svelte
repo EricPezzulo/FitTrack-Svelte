@@ -3,10 +3,10 @@
 	import type { Workout } from '$lib/typings';
 	import type { ObjectId } from 'mongodb';
 	import { writable } from 'svelte/store';
+	import { onMount } from 'svelte';
 
 	export let calendarEvents: { date: string; userId: string; _id: ObjectId; workout: Workout }[];
 	export let month = writable<number>(new Date().getMonth());
-
 	let year = new Date().getFullYear();
 	const months: { [key: number]: string } = {
 		0: 'January',
@@ -24,7 +24,7 @@
 	};
 
 	type calendarEventsType = { date: string; userId: string; _id: ObjectId; workout: Workout }[];
-	type DayType = { day: number; workoutName: string | null };
+	type DayType = { day: number; paddingDate: boolean; workoutName: string | null };
 	let daysInMonth: number,
 		lastDayLastMonth: number,
 		monthEndDayOfWeek: number,
@@ -34,7 +34,6 @@
 		startLastMonthDays: number,
 		paddingStart: DayType[],
 		paddingEnd: DayType[],
-		allDays: DayType[],
 		days: DayType[] = [];
 
 	function buildCalendar() {
@@ -51,7 +50,8 @@
 			.map((_, i) => {
 				return {
 					day: startLastMonthDays + i,
-					workoutName: null
+					workoutName: null,
+					paddingDate: true
 				};
 			});
 
@@ -60,35 +60,32 @@
 			.map((_, i) => {
 				return {
 					day: i + 1,
-					workoutName: null
+					workoutName: null,
+					paddingDate: true
 				};
 			});
-		allDays = [
-			...paddingStart,
-			...Array(daysInMonth)
-				.fill(null)
-				.map((_, i) => {
+		let originalMonthDays = Array(daysInMonth)
+			.fill(null)
+			.map((_, i) => {
+				const matchingEvent = calendarEvents.find(
+					(event) => i + 1 === Number(event.date.split('/')[1])
+				);
+				if (matchingEvent) {
 					return {
 						day: i + 1,
-						workoutName: null
+						workoutName: matchingEvent.workout.workoutName,
+						paddingDate: false
 					};
-				}),
-			...paddingEnd
-		];
-		days = allDays.map((day) => {
-			const matchingEvent = calendarEvents.find(
-				(event) => day.day === Number(event.date.split('/')[1])
-			);
-			if (matchingEvent) {
-				// console.log(matchingEvent.workout);
+				}
+
 				return {
-					...day,
-					workoutName: matchingEvent.workout.workoutName
+					day: i + 1,
+					workoutName: null,
+					paddingDate: false
 				};
-			}
-			return day;
-		});
-		return days;
+			});
+
+		days = [...paddingStart, ...originalMonthDays, ...paddingEnd];
 	}
 	function paginateNextMonth() {
 		if ($month < 11) {
@@ -103,8 +100,10 @@
 			buildCalendar();
 		}
 	}
-	buildCalendar();
-	$: console.log(days);
+	onMount(() => {
+		buildCalendar();
+	});
+
 	const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 </script>
 
