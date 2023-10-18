@@ -14,3 +14,14 @@ export const exerciseList = writable<ExerciseListType>({ exercises: [] });
 export const entryNumberStore = writable<number>(1);
 
 export const itemsStore = writable<Workout[]>([]);
+
+function createCalanderModalStore() {
+	const { set, subscribe, update } = writable<boolean>(false);
+	return {
+		subscribe,
+		set,
+		toggle: () => update((cur) => !cur)
+	};
+}
+
+export const calendarModalStore = createCalanderModalStore();
