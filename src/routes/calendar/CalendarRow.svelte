@@ -1,25 +1,43 @@
 <script lang="ts">
 	import { calendarModalStore } from '../../stores';
 	import { classNames } from '../../utils/classnames';
-	type DayType = { day: number; paddingDate: boolean; workoutName: string | null };
+	type DayType = {
+		day: number;
+		paddingDate: boolean;
+		workoutName: string | null;
+		startPadding?: boolean;
+		endPadding?: boolean;
+	};
 	export let days: DayType[];
-	export let fromRange: number;
-	export let toRange: number;
+
+	export let paginateNextMonth: () => void = () => {};
+	export let paginatePrevMonth: () => void = () => {};
 
 	function openModal() {
 		calendarModalStore.toggle();
 	}
-	// console.log(days);
+	function handlePaddingClick(dayObj: DayType) {
+		console.log(dayObj);
+		if (dayObj.startPadding) {
+			paginatePrevMonth();
+		}
+		if (dayObj.endPadding) {
+			console.log('click');
+			paginateNextMonth();
+		}
+	}
+	console.log(days);
 </script>
 
 <tr class="flex">
 	<!--  if last row dont render bottom border -->
 
-	{#each days.slice(fromRange, toRange) as dayObj}
+	{#each days as dayObj}
 		{#if dayObj.paddingDate}
 			<td
+				on:click={() => handlePaddingClick(dayObj)}
 				class={classNames(
-					'group text-xs h-20 w-full  bg-slate-100 first:hover:rounded-bl-lg last:hover:rounded-br-lg duration-75 ease-in-out border-b border-r last:border-r-0 border-slate-200'
+					'group text-xs h-20 w-full  bg-slate-100 last:hover:rounded-br-lg duration-75 ease-in-out border-b border-r last:border-r-0 border-slate-200'
 				)}
 			>
 				{#if dayObj.workoutName}

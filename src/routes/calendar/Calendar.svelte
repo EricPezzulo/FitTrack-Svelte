@@ -2,11 +2,14 @@
 	import CalendarRow from './CalendarRow.svelte';
 	import type { Workout } from '$lib/typings';
 	import type { ObjectId } from 'mongodb';
-	import { writable } from 'svelte/store';
+
 	import { onMount } from 'svelte';
 
+	import Icon from '@iconify/svelte';
+	import { month } from './calendarStore';
+
 	export let calendarEvents: { date: string; userId: string; _id: ObjectId; workout: Workout }[];
-	export let month = writable<number>(new Date().getMonth());
+
 	let year = new Date().getFullYear();
 	const months: { [key: number]: string } = {
 		0: 'January',
@@ -51,7 +54,8 @@
 				return {
 					day: startLastMonthDays + i,
 					workoutName: null,
-					paddingDate: true
+					paddingDate: true,
+					startPadding: true
 				};
 			});
 
@@ -61,7 +65,8 @@
 				return {
 					day: i + 1,
 					workoutName: null,
-					paddingDate: true
+					paddingDate: true,
+					endPadding: true
 				};
 			});
 		let originalMonthDays = Array(daysInMonth)
@@ -111,12 +116,29 @@
 	class="flex flex-col border-collapse w-full outline outline-1 outline-slate-300 bg-white rounded-lg max-w-4xl"
 >
 	<thead>
-		<tr>
-			<th class="font-semibold text-xl md:text-2xl pl-3 pt-3">
-				<button on:click={paginatePrevMonth} class="text-sm">prev</button>
-				{months[$month]}
-				{year}
-				<button on:click={paginateNextMonth} class="text-sm">next</button>
+		<tr class="flex w-96 pl-3">
+			<th class="font-semibold flex justify-between w-full text-xl md:text-2xl pt-3">
+				<button
+					on:click={paginatePrevMonth}
+					class="flex items-center justify-center bg-slate-100 hover:bg-slate-200 duration-100 ease-in-out rounded w-10"
+				>
+					<span>
+						<Icon icon="tabler:chevron-left" height="25px" />
+					</span>
+				</button>
+				<p class="pt-1">
+					{months[$month]}
+					{year}
+				</p>
+
+				<button
+					on:click={paginateNextMonth}
+					class="flex justify-center items-center w-10 bg-slate-100 hover:bg-slate-200 duration-100 ease-in-out rounded"
+				>
+					<span>
+						<Icon icon="tabler:chevron-right" height="25px" />
+					</span></button
+				>
 			</th>
 		</tr>
 		<tr class="grid grid-cols-7 border-b">
@@ -124,11 +146,11 @@
 		</tr>
 	</thead>
 	<tbody class="outline-t-0 outline-1 grid grid-rows-7 bg-white outline-slate-200 rounded-lg">
-		<CalendarRow {days} fromRange={0} toRange={7} />
-		<CalendarRow {days} fromRange={7} toRange={14} />
-		<CalendarRow {days} fromRange={14} toRange={21} />
-		<CalendarRow {days} fromRange={21} toRange={28} />
-		<CalendarRow {days} fromRange={28} toRange={35} />
-		<CalendarRow {days} fromRange={35} toRange={42} />
+		<CalendarRow {paginateNextMonth} {paginatePrevMonth} days={days.slice(0, 7)} />
+		<CalendarRow days={days.slice(7, 14)} />
+		<CalendarRow days={days.slice(14, 21)} />
+		<CalendarRow days={days.slice(21, 28)} />
+		<CalendarRow days={days.slice(28, 35)} {paginateNextMonth} {paginatePrevMonth} />
+		<CalendarRow days={days.slice(35, 42)} {paginateNextMonth} {paginatePrevMonth} />
 	</tbody>
 </table>

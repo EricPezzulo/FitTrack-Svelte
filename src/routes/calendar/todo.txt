@@ -1,0 +1,10 @@
+When a day with no events has been clicked: 
+    1.) Open "AddEventToCalendarDay" modal
+    2.) This modal should have a selection area for the users existing      workouts, and an option to create a new Event for that day.
+    
+
+When a day with an event has been clicked: 
+    1.) Open "ViewCalendarDayEvent" modal
+    2.) this modal should show the entire event data and have an option to edit that events on that day.
+
+impletment a system for meal planning on the calendar too.
