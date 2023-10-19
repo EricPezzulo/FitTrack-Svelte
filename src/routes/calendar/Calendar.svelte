@@ -2,11 +2,9 @@
 	import CalendarRow from './CalendarRow.svelte';
 	import type { Workout } from '$lib/typings';
 	import type { ObjectId } from 'mongodb';
-
 	import { onMount } from 'svelte';
-
-	import Icon from '@iconify/svelte';
 	import { month } from './calendarStore';
+	import CalendarNavigation from './CalendarNavigation.svelte';
 
 	export let calendarEvents: { date: string; userId: string; _id: ObjectId; workout: Workout }[];
 
@@ -38,6 +36,9 @@
 		paddingStart: DayType[],
 		paddingEnd: DayType[],
 		days: DayType[] = [];
+	function formatDate(d: number): string {
+		return d.toString().padStart(2, '0');
+	}
 
 	function buildCalendar() {
 		daysInMonth = new Date(year, $month + 1, 0).getDate();
@@ -72,21 +73,26 @@
 		let originalMonthDays = Array(daysInMonth)
 			.fill(null)
 			.map((_, i) => {
-				const matchingEvent = calendarEvents.find(
-					(event) => i + 1 === Number(event.date.split('/')[1])
-				);
+				const dayNumber = i + 1;
+				const currentMonth = $month + 1;
+				const dateStr = `${formatDate(currentMonth)}/${formatDate(dayNumber)}/${year}`;
+
+				const matchingEvent = calendarEvents.find((event) => dateStr === event.date);
+
 				if (matchingEvent) {
 					return {
 						day: i + 1,
 						workoutName: matchingEvent.workout.workoutName,
-						paddingDate: false
+						paddingDate: false,
+						date: dateStr
 					};
 				}
 
 				return {
 					day: i + 1,
 					workoutName: null,
-					paddingDate: false
+					paddingDate: false,
+					date: dateStr
 				};
 			});
 
@@ -109,6 +115,8 @@
 		buildCalendar();
 	});
 
+	$: currentMonth = months[$month];
+
 	const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 </script>
 
@@ -116,31 +124,8 @@
 	class="flex flex-col border-collapse w-full outline outline-1 outline-slate-300 bg-white rounded-lg max-w-4xl"
 >
 	<thead>
-		<tr class="flex w-96 pl-3">
-			<th class="font-semibold flex justify-between w-full text-xl md:text-2xl pt-3">
-				<button
-					on:click={paginatePrevMonth}
-					class="flex items-center justify-center bg-slate-100 hover:bg-slate-200 duration-100 ease-in-out rounded w-10"
-				>
-					<span>
-						<Icon icon="tabler:chevron-left" height="25px" />
-					</span>
-				</button>
-				<p class="pt-1">
-					{months[$month]}
-					{year}
-				</p>
+		<CalendarNavigation {paginatePrevMonth} {paginateNextMonth} {currentMonth} {year} />
 
-				<button
-					on:click={paginateNextMonth}
-					class="flex justify-center items-center w-10 bg-slate-100 hover:bg-slate-200 duration-100 ease-in-out rounded"
-				>
-					<span>
-						<Icon icon="tabler:chevron-right" height="25px" />
-					</span></button
-				>
-			</th>
-		</tr>
 		<tr class="grid grid-cols-7 border-b">
 			{#each daysOfWeek as weekday}<th class="p-2 text-sm md:text-base">{weekday}</th>{/each}
 		</tr>

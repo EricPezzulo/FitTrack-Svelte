@@ -16,11 +16,38 @@ export const entryNumberStore = writable<number>(1);
 export const itemsStore = writable<Workout[]>([]);
 
 function createCalanderModalStore() {
-	const { set, subscribe, update } = writable<boolean>(false);
+	const { set, subscribe, update } = writable({
+		isOpen: false,
+		hasEvent: false
+	});
+	function findModalType(workoutName: string | null) {
+		if (workoutName) {
+			update((state) => {
+				return {
+					...state,
+					hasEvent: true
+				};
+			});
+		} else {
+			update((state) => {
+				return {
+					...state,
+					hasEvent: false
+				};
+			});
+		}
+	}
 	return {
 		subscribe,
 		set,
-		toggle: () => update((cur) => !cur)
+		toggle: () =>
+			update((state) => {
+				return {
+					...state,
+					isOpen: !state.isOpen
+				};
+			}),
+		findModalType
 	};
 }
 
