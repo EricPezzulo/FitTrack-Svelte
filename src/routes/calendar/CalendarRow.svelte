@@ -4,7 +4,7 @@
 	type DayType = {
 		day: number;
 		paddingDate: boolean;
-		workoutName: string | null;
+		workoutId: string | null | undefined;
 		startPadding?: boolean;
 		endPadding?: boolean;
 		date?: string;
@@ -16,7 +16,8 @@
 
 	function openModal(dayObj: DayType) {
 		calendarModalStore.toggle();
-		calendarModalStore.findModalType(dayObj.workoutName);
+
+		calendarModalStore.findModalType(dayObj.workoutId);
 	}
 	function handlePaddingClick(dayObj: DayType) {
 		if (dayObj.startPadding) {
@@ -27,12 +28,11 @@
 		}
 	}
 
-	let today = new Date().toLocaleDateString();
+	let today = new Date().toLocaleDateString().split('/');
+	let formatedDated = [today[2], today[0], today[1]].join('/');
 </script>
 
 <tr class="flex">
-	<!--  if last row dont render bottom border -->
-
 	{#each days as dayObj}
 		{#if dayObj.paddingDate}
 			<td
@@ -41,13 +41,19 @@
 					'group text-xs h-20 w-full  bg-slate-100 last:hover:rounded-br-lg duration-75 ease-in-out border-b border-r last:border-r-0 border-slate-200'
 				)}
 			>
-				{#if dayObj.workoutName}
+				<!-- {#if dayObj.workoutId}
 					<div class="hidden sm:block h-12 overflow-y-auto no-scrollbar sm:pl-2 pt-2">
 						<p class="rounded w-fit md:p-0.5 group-hover:text-black text-slate-600">
-							{dayObj.workoutName}
+							{dayObj.workoutId}
 						</p>
 					</div>
-				{/if}
+				{/if} -->
+
+				<div>
+					<p class="p-2 text-slate-500">
+						{dayObj.day}
+					</p>
+				</div>
 			</td>
 		{:else}
 			<td
@@ -56,7 +62,7 @@
 					'group text-xs h-20 w-full  hover:bg-gray-100 first:hover:rounded-bl-lg last:hover:rounded-br-lg duration-75 ease-in-out border-b border-r last:border-r-0 border-slate-200'
 				)}
 			>
-				{#if today === dayObj.date}
+				{#if formatedDated === dayObj.date}
 					<div
 						class="flex items-center justify-center bg-blue-500 rounded-full w-6 h-6 m-1 duration-75 ease-in-out text-white shadow"
 					>
@@ -70,10 +76,10 @@
 					</p>
 				{/if}
 
-				{#if dayObj.workoutName}
+				{#if dayObj.workoutId}
 					<div class="hidden sm:block h-12 overflow-y-auto no-scrollbar sm:pl-2 pt-2">
 						<p class="rounded w-fit md:p-0.5 group-hover:text-black text-slate-600">
-							{dayObj.workoutName}
+							{dayObj.workoutId}
 						</p>
 					</div>
 				{/if}

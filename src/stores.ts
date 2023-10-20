@@ -20,8 +20,8 @@ function createCalanderModalStore() {
 		isOpen: false,
 		hasEvent: false
 	});
-	function findModalType(workoutName: string | null) {
-		if (workoutName) {
+	function findModalType(workoutId: string | undefined | null) {
+		if (workoutId) {
 			update((state) => {
 				return {
 					...state,

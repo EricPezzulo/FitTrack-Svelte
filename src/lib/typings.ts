@@ -7,7 +7,7 @@ export type ExerciseListType = {
 	exercises: ExerciseType[];
 };
 export type Workout = {
-	workoutName: string;
+	workoutId: string;
 	exercises: ExerciseType[];
 	_id: string;
 };

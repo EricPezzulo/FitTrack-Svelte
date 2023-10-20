@@ -5,9 +5,10 @@
 	import { onMount } from 'svelte';
 	import { month } from './calendarStore';
 	import CalendarNavigation from './CalendarNavigation.svelte';
+	import { writable } from 'svelte/store';
 
-	export let calendarEvents: { date: string; userId: string; _id: ObjectId; workout: Workout }[];
-
+	export let calendarEvents: calendarEventsType;
+	let calendar = writable(calendarEvents);
 	let year = new Date().getFullYear();
 	const months: { [key: number]: string } = {
 		0: 'January',
@@ -24,8 +25,8 @@
 		11: 'December'
 	};
 
-	type calendarEventsType = { date: string; userId: string; _id: ObjectId; workout: Workout }[];
-	type DayType = { day: number; paddingDate: boolean; workoutName: string | null };
+	type calendarEventsType = { date: string; userId: string; _id: ObjectId; workoutId: string }[];
+	type DayType = { day: number; paddingDate: boolean; workoutId: string | undefined | null };
 	let daysInMonth: number,
 		lastDayLastMonth: number,
 		monthEndDayOfWeek: number,
@@ -52,22 +53,30 @@
 		paddingStart = Array(paddingStartNumber)
 			.fill(null)
 			.map((_, i) => {
+				const dayNumber = i + 1;
+				const prevMonth = $month;
+				const dateStr = `${formatDate(year)}/${formatDate(prevMonth)}/${formatDate(dayNumber)}`;
 				return {
 					day: startLastMonthDays + i,
-					workoutName: null,
+					workoutId: null,
 					paddingDate: true,
-					startPadding: true
+					startPadding: true,
+					date: dateStr
 				};
 			});
 
 		paddingEnd = Array(paddingEndNumber)
 			.fill(null)
 			.map((_, i) => {
+				const dayNumber = i + 1;
+				const nextMonth = $month + 2;
+				const dateStr = `${formatDate(year)}/${formatDate(nextMonth)}/${formatDate(dayNumber)}`;
 				return {
 					day: i + 1,
-					workoutName: null,
+					workoutId: null,
 					paddingDate: true,
-					endPadding: true
+					endPadding: true,
+					date: dateStr
 				};
 			});
 		let originalMonthDays = Array(daysInMonth)
@@ -75,14 +84,21 @@
 			.map((_, i) => {
 				const dayNumber = i + 1;
 				const currentMonth = $month + 1;
-				const dateStr = `${formatDate(currentMonth)}/${formatDate(dayNumber)}/${year}`;
+				const dateStr = `${year}/${formatDate(currentMonth)}/${formatDate(dayNumber)}`;
 
-				const matchingEvent = calendarEvents.find((event) => dateStr === event.date);
+				const matchingEvent:
+					| {
+							date: string;
+							_id: ObjectId;
+							userId: string;
+							workoutId: string;
+					  }
+					| undefined = $calendar.find((event) => dateStr === event.date);
 
 				if (matchingEvent) {
 					return {
 						day: i + 1,
-						workoutName: matchingEvent.workout.workoutName,
+						workoutId: matchingEvent.workoutId,
 						paddingDate: false,
 						date: dateStr
 					};
@@ -90,7 +106,7 @@
 
 				return {
 					day: i + 1,
-					workoutName: null,
+					workoutId: null,
 					paddingDate: false,
 					date: dateStr
 				};
@@ -101,6 +117,7 @@
 	function paginateNextMonth() {
 		if ($month < 11) {
 			++$month;
+			fetchDataForMonth(year, $month + 1);
 			buildCalendar();
 		}
 	}
@@ -108,15 +125,31 @@
 	function paginatePrevMonth() {
 		if ($month > 0) {
 			--$month;
+			fetchDataForMonth(year, $month + 1);
 			buildCalendar();
 		}
 	}
+
+	async function fetchDataForMonth(year: number, month: number) {
+		const response = await fetch(`/calendar/${year}/${month}`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+		$calendar = await response.json();
+		return $calendar;
+	}
 	onMount(() => {
+		$calendar = calendarEvents;
 		buildCalendar();
 	});
 
+	// udpate on store change
 	$: currentMonth = months[$month];
-
+	$: if ($calendar) buildCalendar();
+	$: console.log(days);
+	// $: console.log(calendarEvents);
 	const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 </script>
 
